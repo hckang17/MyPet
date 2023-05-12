@@ -1,0 +1,50 @@
+<div style="line-height: 20%;">
+    <br>
+</div>
+
+<div class="container-fluid">
+        {% if not user.is_authenticated %} <!-- 로그인 하지 않았을 경우 -->
+        <div class="mx-auto sidebar-menubox" style="font-size: 0.7em;">
+            <form method="post" action="{% url 'common:login' %}">
+            {% csrf_token %}<input type="hidden" name="next" value="{{ next }}">  <!-- 로그인 성공후 이동되는 URL -->
+                <div class="mb-2">
+                    <input type="text" class="sidebar-idinput form-control" name="username" id="username" placeholder="ID"
+                        value="{{ form.username.value|default_if_none:'' }}">
+                </div>
+                <div class="mb-2">
+                    <input type="password" class="sidebar-psinput form-control" name="password" id="password" placeholder="PS"
+                        value="{{ form.password.value|default_if_none:'' }}">
+                </div>
+            <button type="submit" class="sidebar-login mb-1">로그인</button>
+            </form>
+            <a href="{%url 'common:signup'%}" ><button type="button" class="sidebar-login">회원가입</button></a>
+        </div>
+        
+        {%else%} <!-- 로그인 하였을 경우 -->
+        <div class="sidebar-userdata" >
+             <!-- 유저정보 표시 -->
+            <div style="line-height:50%;">
+                <br><br>
+                <p style="text-align:center; font-size: 1.3em;">{{user.username}}</p><br>
+            </div>
+            <div class="mb-2" style="text-align: center;">
+                <!-- 자신 블로그로 가는 링크버튼 -->
+                <a href="https://github.com/hckang17"><button type="button" class="btn-sm btn-outline-secondary" style="font-size:0.7em; display: inline-block;">내 블로그로</button></a>
+                <!-- 단국대학교 포털 링크버튼 -->
+                <a href="https://portal.dankook.ac.kr/"><button type="button" class="btn-sm btn-outline-secondary" style="font-size:0.7em; display: inline-block;">단국대포털</button></a>
+            </div>
+            <div>
+                <!-- 로그아웃 버튼 -->
+                <a href="{% url 'common:logout' %}"><button type="button" class="sidebar-login"  style="font-size: 0.7em;">로그아웃</button></a>
+            </div>
+            <div>
+                <!-- 회원정보 수정 버튼 -->
+                <a href="{% url 'common:change_info' %}"><button type="button" class="sidebar-login"  style="font-size: 0.7em;">내정보 수정</button></a>
+            </div>
+        </div>
+
+        <hr width="auto" color="#797979" noshade />
+        {% endif %}
+
+</div>
+

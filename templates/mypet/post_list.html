@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load mypet_filter %}
+{% block content %}
+
+<div class="container my-3">
+    <!-- 글쓰기 버튼 & 포스트 검색 버튼 블록-->
+    {% include "mypet/list_page_header.html" %}
+    <!-- 끝 -->
+    <table class="table">
+        <thead>
+            <tr class="text-center table-dark">
+            <th>번호</th>
+            <th style="width:50%">제목</th>
+            <th>글쓴이</th>
+            <th>작성일시</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if post_list %}
+            {% for poster in post_list %}
+            <tr class="text-center">
+                <td>
+                    <!-- 번호 = 전체건수 - 시작인덱스 - 현재인덱스 + 1 -->
+                    {{ post_list.paginator.count|sub:post_list.start_index|sub:forloop.counter0|add:1 }}
+                </td>
+                <td class="text-start">
+                    <a href="{% url 'mypet:detail' poster.id %}" style="color:black;">{{ poster.subject }}</a>
+                    {% if poster.comment_set.count > 0 %}
+                    <span class="text-danger small mx-2">{{ poster.comment_set.count }}</span>
+                    {% endif %}
+                </td>
+                <td>{{ poster.author.username }}</td>  <!-- 글쓴이 추가 -->
+                <td>{{ poster.create_date }}</td> 
+                {% endfor %}
+            </tr>
+
+            {% else %}
+            <tr>
+                <td colspan="4">게시물이 없습니다.</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    <!-- 페이징 처리 -->
+    {% include "mypet/pagination.html" %}
+    <!-- 페이징 처리 끝-->
+
+</div>
+<form id="searchForm" method="get" action="{% url 'mypet:index' %}">
+    <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:'' }}">
+    <input type="hidden" id="page" name="page" value="{{ page }}">
+</form>
+
+{% endblock %}
+
+{% block script %}
+<script type='text/javascript'>
+const page_elements = document.getElementsByClassName("page-link");
+Array.from(page_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+        document.getElementById('page').value = this.dataset.page;
+        document.getElementById('searchForm').submit();
+    });
+});
+const btn_search = document.getElementById("btn_search");
+btn_search.addEventListener('click', function() {
+    document.getElementById('kw').value = document.getElementById('search_kw').value;
+    document.getElementById('page').value = 1;  // 검색버튼을 클릭할 경우 1페이지부터 조회한다.
+    document.getElementById('searchForm').submit();
+});
+</script>
+{% endblock %}
