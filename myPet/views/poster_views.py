@@ -9,16 +9,15 @@ from ..models import Poster
 @login_required(login_url='common:login')
 def poster_create(request):
     if request.method == 'POST':
-        if request.user.is_superuser:
-            form = PosterForm(request.POST)
-            if form.is_valid():  # 폼이 유효하다면
-                poster = form.save(commit=False)  # 임시 저장하여 question 객체를 리턴받는다.
-                poster.author = request.user
-                poster.create_date = timezone.now()  # 실제 저장을 위해 작성일시를 설정한다.
-                poster.save()  # 데이터를 실제로 저장한다.
-                return redirect('mypet:index')
-        else:   # admin이 아닌 경우
-            messages.error(request,'admin만 글을 쓸 수 있습니다.')
+        form = PosterForm(request.POST)
+        if form.is_valid():  # 폼이 유효하다면
+            poster = form.save(commit=False)  # 임시 저장하여 question 객체를 리턴받는다.
+            poster.author = request.user
+            poster.create_date = timezone.now()  # 실제 저장을 위해 작성일시를 설정한다.
+            poster.save()  # 데이터를 실제로 저장한다.
+            return redirect('mypet:index')
+        else:   #폼이 잘못되었을 경우
+            messages.error(request,'오류가 발생했습니다.')
             form = PosterForm(request.POST)
     else:
         form = PosterForm()
