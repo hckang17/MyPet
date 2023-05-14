@@ -75,7 +75,7 @@ footer {
 
 section.main-section {
     width: 82%;
-    height: 700px;
+    height: 600px;
     float: right;
     overflow-y: scroll;
 }
@@ -83,7 +83,7 @@ section.main-section {
 aside.main-aside {
     width: 18%;
     background-color: rgb(233, 233, 233, .8);
-    height: 700px;
+    height: 600px;
 }
 
 *:not([text-selectable]) {

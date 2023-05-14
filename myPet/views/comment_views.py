@@ -2,10 +2,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect, resolve_url
 from django.utils import timezone
-
 from ..form import CommentForm
 from ..models import Poster, Comment
-
 
 @login_required(login_url='common:login')
 def comment_create(request, poster_id):
@@ -29,8 +27,6 @@ def comment_create(request, poster_id):
     context = {'poster': poster, 'form': form}
     return render(request, 'mypet/post_detail.html', context)
 
-
-
 @login_required(login_url='common:login')
 def comment_modify(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
@@ -49,7 +45,6 @@ def comment_modify(request, comment_id):
         form = CommentForm(instance=comment)
     context = {'comment': comment, 'form': form}
     return render(request, 'mypet/comment_form.html', context)
-
 
 @login_required(login_url='common:login')
 def comment_delete(request, comment_id):
